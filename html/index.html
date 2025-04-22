@@ -1,14 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
+    <title>Đăng ký CCCD Sinh viên</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <style>
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        
+    </style>
 </head>
+
 <body>
-    <script src="../js/bootstrap.bundle.js"></script>
-    <script src="../js/bootstrap.bundle.min.js"></script>
+
+    <div class="container mt-5">
+        <div class=" text-left mb-3">
+            <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#formModal">Đăng ký</button> -->
+            <a href="#">Đăng nhập</a>
+            <a href="#" data-toggle="modal" data-target="#formModal" style="margin-left: 20px;">Đăng ký</a>
+        </div>
+        <h3 class="text-center text-uppercase font-weight-bold">DANH SÁCH ĐĂNG KÝ LÀM CĂN CƯỚC SINH VIÊN</h3>
+        <h3 class="text-center text-uppercase font-weight-bold">TRƯỜNG ĐHCN TP. HỒ CHÍ MINH</h3>
+
+
+        <table class="table table-bordered text-center" id="studentTable">
+            <thead class="thead-light">
+                <tr>
+                    <th>STT</th>
+                    <th>Họ tên</th>
+                    <th>CMND cũ</th>
+                    <th>Quê quán</th>
+                    <th>Email</th>
+                    <th>Điện thoại</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="formModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0 pb-0" style="background-color: white;">
+                    <h5 class="modal-title mx-auto font-weight-bold text-uppercase" style="color: black;">THÔNG TIN CÁ NHÂN</h5>
+                    <button type="button" class="close position-absolute" style="right: 1rem;"
+                        data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body pt-2">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="name"><strong>Họ tên</strong></label>
+                            <input type="text" class="form-control" id="name" placeholder="Nhập họ tên">
+                        </div>
+                        <div class="form-group">
+                            <label for="cmnd"><strong>SCMND cũ</strong></label>
+                            <input type="text" class="form-control" id="cmnd" placeholder="Nhập SCMND cũ">
+                        </div>
+                        <div class="form-group">
+                            <label for="address"><strong>Quê quán</strong></label>
+                            <input type="text" class="form-control" id="address" placeholder="Nhập tỉnh của bạn">
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><strong>Email</strong></label>
+                            <input type="email" class="form-control" id="email" placeholder="Nhập Email của bạn">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"><strong>Số điện thoại</strong></label>
+                            <input type="text" class="form-control" id="phone" placeholder="xxxx-xxx-xxxx">
+                        </div>
+                        <div class="form-group">
+                            <label for="avatar"><strong>Ảnh đại diện</strong></label>
+                            <input type="file" class="form-control-file" id="avatar">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block mt-3">Lưu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <script src="../js/bootstrap.min.js"></script>
+    <script>
+        let count = 0;
+
+        $('#registerForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const name = $('#name').val();
+            const cmnd = $('#cmnd').val().trim();
+            const address = $('#address').val().trim();
+            const email = $('#email').val().trim();
+            const phone = $('#phone').val().trim();
+
+            // Validation
+            const nameRegex = /^([A-ZÀ-Ỹ][a-zà-ỹ]+)(\s[A-ZÀ-Ỹ][a-zà-ỹ]+)+$/;
+            const cmndRegex = /^\d{9}$/;
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@iuh\.edu\.vn$/;
+            const phoneRegex = /^0\d{9}$/;
+
+            if (!nameRegex.test(name)) return alert("Họ tên sai định dạng!");
+            if (!cmndRegex.test(cmnd)) return alert("CMND cũ phải là 9 chữ số!");
+            if (!address || !/^[A-Z]/.test(address)) return alert("Quê quán phải viết hoa chữ cái đầu và không để trống!");
+            if (!emailRegex.test(email)) return alert("Email sai định dạng!");
+            if (!phoneRegex.test(phone)) return alert("Số điện thoại sai định dạng!");
+
+            // Add to table
+            count++;
+            $('#studentTable tbody').append(`
+      <tr>
+        <td>${count}</td>
+        <td>${name}</td>
+        <td>${cmnd}</td>
+        <td>${address}</td>
+        <td>${email}</td>
+        <td>${phone}</td>
+      </tr>
+    `);
+
+            $('#formModal').modal('hide');
+            this.reset();
+        });
+    </script>
+
 </body>
+
 </html>
